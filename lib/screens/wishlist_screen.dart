@@ -65,11 +65,11 @@ class WishListScreen extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: ((context) => const ItemScreen()),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: ((context) =>  ItemScreen()),
+            //   ),
+            // );
           },
         ),
       ),

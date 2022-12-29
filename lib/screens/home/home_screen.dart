@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/home/widgets.dart';
@@ -26,8 +27,8 @@ class HomeScreen extends StatelessWidget {
         controller: pageController,
         children: [
           ListView(
-            children: const <Widget>[
-              BannerContainer(),
+            children: <Widget>[
+              const BannerContainer(),
               GridviewSection(),
             ],
           ),
@@ -78,65 +79,131 @@ class HomeScreen extends StatelessWidget {
 }
 
 class GridviewSection extends StatelessWidget {
-  const GridviewSection({
+  GridviewSection({
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    _stream = _reference.snapshots();
+  }
+
+  final CollectionReference _reference =
+      FirebaseFirestore.instance.collection('items_list');
+
+  //_reference.get() --> returns Future<QuerySnapshot>
+  //_reference.snapshot --> Stream<QuerySnpashot> -- realtime update
+
+  late Stream<QuerySnapshot> _stream;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, mainAxisExtent: size.height * 0.30),
-      itemCount: 5,
-      itemBuilder: (context, index) => GestureDetector(
-        child: Card(
-          margin: const EdgeInsets.all(5),
-          shadowColor: Colors.black,
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+    return StreamBuilder<QuerySnapshot>(
+        stream: _stream,
+        builder: (context, AsyncSnapshot snapshot) {
+          //check error ----->
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Eroor${snapshot.error}'),
+            );
+          }
+
+          //check if data is arrived ------>
+
+          if (snapshot.hasData) {
+            //get data -------->
+
+            QuerySnapshot querySnapshot = snapshot.data;
+            List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+
+            //converting the documents to map -------->
+
+            List<Map> items = documents
+                .map((e) => {
+                      'id': e['id'],
+                      'name': e['name'],
+                      'org_price': e['original_price'],
+                      'image': e['imageUrl'],
+                      'dis_price': e['discounted_price'],
+                      'description': e['desciption']
+                    })
+                .toList();
+
+            //Display the list -------->
+
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, mainAxisExtent: size.height * 0.30),
+              itemCount: items.length,
+              itemBuilder: (context, index) => GestureDetector(
+                child: Card(
+                  margin: const EdgeInsets.all(5),
+                  shadowColor: Colors.black,
+                  child: Stack(
                     children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            FontAwesomeIcons.solidHeart,
-                            color: Colors.grey[400],
-                          )),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    FontAwesomeIcons.solidHeart,
+                                    color: Colors.grey[400],
+                                  )),
+                            ],
+                          ),
+                          SizedBox(
+                            width: size.width * 0.32,
+                            height: size.height * 0.15,
+                            child: Image(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                items[index]['image'],
+                              ),
+                              height: size.height * 0.15,
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
+                          Text(items[index]['name']),
+                          SizedBox(
+                            height: size.height * 0.012,
+                          ),
+                          Text(
+                            items[index]['dis_price'],
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  Image(
-                    image: const NetworkImage(
-                        'https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662443667/Croma%20Assets/Communication/Mobiles/Images/251804_p9fded.png/mxw_2048,f_auto'),
-                    height: size.height * 0.15,
-                  ),
-                  const Text("OnePlus Nord CE"),
-                  SizedBox(
-                    height: size.height * 0.012,
-                  ),
-                  const Text(
-                    '₹19,000',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ],
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: ((context) => ItemScreen(
+                            id: items[index]['id'],
+                            name: items[index]['name'],
+                            orgPrice: items[index]['org_price'],
+                            disPrice: items[index]['dis_price'],
+                            description: items[index]['description'],
+                            imageUrl: items[index]['image'],
+                          )),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
-        ),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: ((context) => const ItemScreen()),
-            ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
-    );
+        });
   }
 }
 

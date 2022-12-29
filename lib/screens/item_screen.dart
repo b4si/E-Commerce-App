@@ -1,15 +1,32 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ItemScreen extends StatelessWidget {
-  const ItemScreen({super.key});
+  ItemScreen({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.orgPrice,
+    required this.disPrice,
+    required this.description,
+    required this.imageUrl,
+  });
+
+  String id;
+  String name;
+  String orgPrice;
+  String disPrice;
+  String description;
+  String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Item'),
+        title: Text(name),
       ),
       body: Container(
         alignment: Alignment.topCenter,
@@ -27,24 +44,42 @@ class ItemScreen extends StatelessWidget {
                   )
                 ],
               ),
-              const Image(
-                image: NetworkImage(
-                    'https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662443667/Croma%20Assets/Communication/Mobiles/Images/251804_p9fded.png/mxw_2048,f_auto'),
-                height: 300,
+              SizedBox(
+                width: size.width * 0.7,
+                height: size.height * 0.45,
+                child: Image(
+                  image: NetworkImage(imageUrl),
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
               ),
-              const Text(
-                "OnePlus Nord CE",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              SizedBox(
+                height: size.height * 0.01,
               ),
-              const Text(
-                '₹19,000',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Text(
+                name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              const Text(
-                'MRP ₹22,000',
-                style: TextStyle(
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Text(
+                disPrice,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Text(
+                orgPrice,
+                style: const TextStyle(
                   decoration: TextDecoration.lineThrough,
                 ),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -91,6 +126,9 @@ class ItemScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
@@ -98,17 +136,21 @@ class ItemScreen extends StatelessWidget {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(15)),
                   child: Column(
-                    children: const [
-                      Text(
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      const Text(
                         'Description',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
+                        maxLines: 4,
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Lorem ipsum is a placeholder text that is commonly used in the design and layout of documents, websites, and other visual media. It is used as a placeholder because it has a roughly normal distribution of letters and resembles real text, making it a useful tool for designers to see how text will look in a layout without having to worry about the actual content of the text.',
-                          style: TextStyle(fontSize: 15),
+                          description,
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                     ],

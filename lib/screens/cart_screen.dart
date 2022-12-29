@@ -20,11 +20,11 @@ class CartScreenWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: (() => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: ((context) => const ItemScreen()),
-                          ),
-                        )),
+                    // onTap: (() => Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: ((context) =>  ItemScreen()),
+                    //       ),
+                    //     )),
                     child: Image(
                       image: const NetworkImage(
                           'https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662443667/Croma%20Assets/Communication/Mobiles/Images/251804_p9fded.png/mxw_2048,f_auto'),
@@ -36,11 +36,11 @@ class CartScreenWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: ((context) => const ItemScreen()),
-                          ),
-                        ),
+                        // onTap: () => Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: ((context) =>  ItemScreen()),
+                        //   ),
+                        // ),
                         child: const Text(
                           'OnePlus Nord CE',
                           style: TextStyle(
@@ -50,11 +50,11 @@ class CartScreenWidget extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: ((context) => const ItemScreen()),
-                          ),
-                        ),
+                        // onTap: () => Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: ((context) =>  ItemScreen()),
+                        //   ),
+                        // ),
                         child: const Text(
                           "₹19,000",
                           style: TextStyle(
