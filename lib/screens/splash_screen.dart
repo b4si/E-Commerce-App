@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:e_commerce_app/screens/home/home_screen.dart';
+import 'package:e_commerce_app/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
         'COZA STORE',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
-      nextScreen: HomeScreen(),
+      nextScreen: LoginScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
   }

@@ -3,7 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
-import 'package:e_commerce_app/screens/home/widgets.dart';
+import 'package:e_commerce_app/screens/home/banner_widget.dart';
+import 'package:e_commerce_app/screens/home/navigation_drawer_widget.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:e_commerce_app/screens/profile_screen.dart';
 import 'package:e_commerce_app/screens/wishlist_screen.dart';
@@ -28,7 +29,40 @@ class HomeScreen extends StatelessWidget {
         children: [
           ListView(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  bottom: 8,
+                  left: 20,
+                  right: 20,
+                ),
+                child: SizedBox(
+                  height: 40,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      // hintText: 'Search',
+                      // labelText: 'Search',
+                      suffixIcon: const Icon(
+                        Icons.search_outlined,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               const BannerContainer(),
+              const SizedBox(
+                height: 7,
+              ),
+              const BannerDots(),
+              const SizedBox(
+                height: 7,
+              ),
               GridviewSection(),
             ],
           ),
@@ -171,12 +205,14 @@ class GridviewSection extends StatelessWidget {
                           ),
                           Text(items[index]['name']),
                           SizedBox(
-                            height: size.height * 0.012,
+                            height: size.height * 0.005,
                           ),
                           Text(
-                            items[index]['dis_price'],
+                            ("₹ ${items[index]['dis_price']}.00"),
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -204,26 +240,5 @@ class GridviewSection extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         });
-  }
-}
-
-class BannerContainer extends StatelessWidget {
-  const BannerContainer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return SizedBox(
-      width: double.infinity,
-      child: Image(
-        image: const NetworkImage(
-            'https://i03.appmifile.com/572_operator_in/19/12/2022/830e5a8177242f31d03708f7b8af03a8.jpg?f=webp'),
-        height: size.height * 0.21,
-        fit: BoxFit.cover,
-      ),
-    );
   }
 }

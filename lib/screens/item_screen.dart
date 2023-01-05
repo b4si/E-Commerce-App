@@ -62,21 +62,20 @@ class ItemScreen extends StatelessWidget {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               SizedBox(
-                height: size.height * 0.01,
+                height: size.height * 0.002,
               ),
               Text(
-                disPrice,
+                ('₹ $disPrice.00'),
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               SizedBox(
-                height: size.height * 0.01,
+                height: size.height * 0.005,
               ),
               Text(
-                orgPrice,
+                ('₹ $orgPrice.00'),
                 style: const TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                ),
+                    decoration: TextDecoration.lineThrough, color: Colors.red),
               ),
               SizedBox(
                 height: size.height * 0.01,
@@ -108,7 +107,7 @@ class ItemScreen extends StatelessWidget {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.orangeAccent),
+                            MaterialStateProperty.all(Colors.orange),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -138,6 +137,7 @@ class ItemScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SizedBox(
+                        width: double.infinity,
                         height: size.height * 0.01,
                       ),
                       const Text(

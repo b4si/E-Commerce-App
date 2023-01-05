@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:flutter/material.dart';
 
 class OrdersScreen extends StatelessWidget {
