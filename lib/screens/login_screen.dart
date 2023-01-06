@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Consumer<LoginProvider>(
               builder: (context, value, child) => Form(
-                key: value.formKey,
+                key: _formKey,
                 child: Column(
                   children: [
                     Icon(
@@ -140,7 +142,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          if (value.formKey.currentState!.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             value.loginToHome(context);
                           }
                         },

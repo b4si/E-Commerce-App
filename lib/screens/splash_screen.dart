@@ -21,7 +21,7 @@ class SplashScreen extends StatelessWidget {
         'COZA STORE',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
-      nextScreen: isLoggedIn ? HomeScreen() : const LoginScreen(),
+      nextScreen: isLoggedIn ? HomeScreen() : LoginScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
   }

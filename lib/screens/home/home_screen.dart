@@ -40,8 +40,6 @@ class HomeScreen extends StatelessWidget {
                   height: 40,
                   child: TextFormField(
                     decoration: InputDecoration(
-                      // hintText: 'Search',
-                      // labelText: 'Search',
                       suffixIcon: const Icon(
                         Icons.search_outlined,
                       ),

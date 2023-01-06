@@ -1,5 +1,7 @@
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/provider/login_provider.dart';
+import 'package:e_commerce_app/provider/otp_provider.dart';
+import 'package:e_commerce_app/provider/signup_provider.dart';
 import 'package:e_commerce_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SignupProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OtpProvider(),
         ),
       ],
       child: MaterialApp(
