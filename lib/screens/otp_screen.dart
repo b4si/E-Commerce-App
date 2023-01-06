@@ -1,9 +1,11 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:async';
 import 'dart:developer';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'package:e_commerce_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class OtpScreen extends StatelessWidget {
   String email;
@@ -23,40 +25,16 @@ class OtpScreen extends StatelessWidget {
       )),
     );
     try {
-      var response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/verifyOtp'),
-          body: {"otp": otpController.text, "userEmail": email});
-      if (response.statusCode == 403) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red.shade800,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            padding: const EdgeInsets.all(15.0),
-            elevation: 6.0,
-            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            content: const Text('OTP is expired'),
-          ),
-        );
-      } else if (response.statusCode == 401) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red.shade800,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            padding: const EdgeInsets.all(15.0),
-            elevation: 6.0,
-            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            content: const Text('Invalid OTP'),
-          ),
-        );
-      } else if (response.statusCode == 200) {
+      var response = await Dio().post(
+        ('http://10.0.2.2:3000/verifyOtp'),
+        data: {
+          "otp": otpController.text,
+          "userEmail": email,
+        },
+      ).timeout(
+        const Duration(seconds: 15),
+      );
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             behavior: SnackBarBehavior.floating,
@@ -71,8 +49,69 @@ class OtpScreen extends StatelessWidget {
           ),
         );
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => const LoginScreen(),
         ));
+      }
+    } on SocketException {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) => const Center(
+            child: AlertDialog(
+          content: Text('No internet connection'),
+        )),
+      );
+    } on TimeoutException {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) => const Center(
+            child: AlertDialog(
+          content: Text('No internet connection'),
+        )),
+      );
+    } on DioError catch (e) {
+      if (e.response == null) {
+        Navigator.of(context).pop();
+        return showDialog(
+          context: context,
+          builder: (context) => const Center(
+              child: AlertDialog(
+            content: Text('No internet connection '),
+          )),
+        );
+      }
+      if (e.response!.statusCode == 401) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red.shade800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(15.0),
+            elevation: 6.0,
+            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            content: const Text('Invalid OTP'),
+          ),
+        );
+      }
+      if (e.response!.statusCode == 403) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red.shade800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(15.0),
+            elevation: 6.0,
+            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            content: const Text('OTP Expired'),
+          ),
+        );
       }
     } catch (err) {
       log(err.toString());

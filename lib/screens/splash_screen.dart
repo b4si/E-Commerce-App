@@ -1,9 +1,17 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:e_commerce_app/screens/home/home_screen.dart';
 import 'package:e_commerce_app/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+  bool isLoggedIn;
+
+  SplashScreen({
+    super.key,
+    required this.isLoggedIn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +21,7 @@ class SplashScreen extends StatelessWidget {
         'COZA STORE',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
-      nextScreen: LoginScreen(),
+      nextScreen: isLoggedIn ? HomeScreen() : const LoginScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
   }

@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:e_commerce_app/screens/login_screen.dart';
 import 'package:e_commerce_app/screens/otp_screen.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -29,14 +31,55 @@ class SignUpScreen extends StatelessWidget {
       )),
     );
     try {
-      var response =
-          await http.post(Uri.parse('http://10.0.2.2:3000/otpPage'), body: {
+      var response = await Dio().post(('http://10.0.2.2:3000/otpPage'), data: {
         "name": nameController.text,
         "email": emailController.text,
         "mobile": numberController.text,
         "password": passwordController.text,
-      });
-      if (response.statusCode == 409) {
+      }).timeout(
+        const Duration(seconds: 15),
+      );
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return OtpScreen(
+                email: emailController.text,
+              );
+            },
+          ),
+        );
+      }
+    } on SocketException {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) => const Center(
+            child: AlertDialog(
+          content: Text('No internet connection'),
+        )),
+      );
+    } on TimeoutException {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) => const Center(
+            child: AlertDialog(
+          content: Text('No internet connection'),
+        )),
+      );
+    } on DioError catch (e) {
+      if (e.response == null) {
+        Navigator.of(context).pop();
+        return showDialog(
+          context: context,
+          builder: (context) => const Center(
+              child: AlertDialog(
+            content: Text('No internet connection '),
+          )),
+        );
+      }
+      if (e.response!.statusCode == 409) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -51,19 +94,7 @@ class SignUpScreen extends StatelessWidget {
             content: const Text('E-mail or phone number already exist'),
           ),
         );
-      } else if (response.statusCode == 200) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) {
-              return OtpScreen(
-                email: emailController.text,
-              );
-            },
-          ),
-        );
       }
-
-      //  print(response.body);
     } catch (err) {
       log(err.toString());
     }
@@ -327,7 +358,7 @@ class SignUpScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: ((context) => LoginScreen()),
+                              builder: ((context) => const LoginScreen()),
                             ),
                           ),
                           child: const Text(
