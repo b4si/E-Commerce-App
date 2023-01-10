@@ -51,11 +51,13 @@ class LoginProvider with ChangeNotifier {
           ),
         );
 
+        //Storing isLogedIn in shared preferences--------->
+
         final prefs = await SharedPreferences.getInstance();
         prefs.setBool('isLoggedIn', true);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: ((context) => HomeScreen())),
+            (route) => false);
       }
 
       //Handling network connection error-------->

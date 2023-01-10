@@ -3,7 +3,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:e_commerce_app/screens/home/home_screen.dart';
 import 'package:e_commerce_app/screens/login_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
   bool isLoggedIn;
@@ -15,12 +15,14 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return AnimatedSplashScreen(
+      backgroundColor: const Color(0xFF8AE6E3),
       duration: 3000,
-      splash: const Text(
-        'COZA STORE',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-      ),
+      splashIconSize: size.width,
+      splash: const Image(
+          fit: BoxFit.cover, image: AssetImage('assets\\Gadgeto.png')),
       nextScreen: isLoggedIn ? HomeScreen() : LoginScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
