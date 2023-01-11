@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/links/url.dart';
+import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,9 +36,20 @@ class LoginProvider with ChangeNotifier {
         const Duration(seconds: 15),
       );
 
+      Map<String, dynamic> user = {};
+      user.addAll(response.data);
+
+      addPreferredShare(
+        user["user"]["email"],
+        user["user"]["_id"],
+        user["user"]["name"],
+      );
+
       //checking the response is success or not-------->
 
       if (response.statusCode == 200) {
+        log(user["user"]["name"].toString());
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             behavior: SnackBarBehavior.floating,
