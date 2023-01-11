@@ -50,7 +50,7 @@ class ItemScreen extends StatelessWidget {
                 child: Image(
                   image: NetworkImage(imageUrl),
                   height: 300,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
               SizedBox(

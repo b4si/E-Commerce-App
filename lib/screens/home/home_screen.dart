@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
+import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/home/banner_widget.dart';
@@ -19,50 +19,118 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false).getProducts(context);
     return Scaffold(
       endDrawer: const NavigationDrawer(),
       appBar: AppBar(
-        title: const Text('COZA'),
+        backgroundColor: Colors.teal.shade400,
+        title: const Text('GADGETO'),
       ),
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
-          ListView(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8,
-                  bottom: 8,
-                  left: 20,
-                  right: 20,
-                ),
-                child: SizedBox(
-                  height: 40,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      suffixIcon: const Icon(
-                        Icons.search_outlined,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          width: 2,
+          Consumer<HomeProvider>(
+            builder: (context, value, child) => ListView(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8,
+                    bottom: 8,
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        suffixIcon: const Icon(
+                          Icons.search_outlined,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const BannerContainer(),
-              const SizedBox(
-                height: 7,
-              ),
-              const BannerDots(),
-              const SizedBox(
-                height: 7,
-              ),
-              GridviewSection(),
-            ],
+                const BannerContainer(),
+                const SizedBox(
+                  height: 7,
+                ),
+                const BannerDots(),
+                const SizedBox(
+                  height: 7,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Mobile Phones',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        'View All',
+                        style: TextStyle(color: Colors.blue.shade400),
+                      )
+                    ],
+                  ),
+                ),
+                ListViewSection(value: value.mobileDataList),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Laptops',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        'View All',
+                        style: TextStyle(
+                          color: Colors.blue.shade400,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                ListViewSection(value: value.laptopDataList),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Tablets',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        'View All',
+                        style: TextStyle(
+                          color: Colors.blue.shade400,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                ListViewSection(value: value.tabletDataList),
+              ],
+            ),
           ),
           const CartScreenWidget(),
           const WishListScreen(),
@@ -73,31 +141,30 @@ class HomeScreen extends StatelessWidget {
         builder: (context, value, child) => BottomNavigationBar(
           currentIndex: value.selectedIndex,
           unselectedItemColor: Colors.white38,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              backgroundColor: Colors.teal,
-              icon: Icon(FontAwesomeIcons.house),
+              backgroundColor: Colors.teal.shade400,
+              icon: const Icon(FontAwesomeIcons.house),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              backgroundColor: Colors.teal,
-              icon: Icon(FontAwesomeIcons.cartShopping),
+              backgroundColor: Colors.teal.shade400,
+              icon: const Icon(FontAwesomeIcons.cartShopping),
               label: 'Cart',
             ),
             BottomNavigationBarItem(
-              backgroundColor: Colors.teal,
-              icon: Icon(FontAwesomeIcons.heart),
+              backgroundColor: Colors.teal.shade400,
+              icon: const Icon(FontAwesomeIcons.heart),
               label: 'Wishlist',
             ),
             BottomNavigationBarItem(
-              backgroundColor: Colors.teal,
-              icon: Icon(FontAwesomeIcons.user),
+              backgroundColor: Colors.teal.shade400,
+              icon: const Icon(FontAwesomeIcons.user),
               label: 'Profile',
             ),
           ],
           onTap: (gettingValue) {
             value.navigationChanger(gettingValue);
-
             pageController.animateToPage(
               gettingValue,
               duration: const Duration(milliseconds: 500),
@@ -110,133 +177,116 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class GridviewSection extends StatelessWidget {
-  GridviewSection({
+class ListViewSection extends StatelessWidget {
+  final List value;
+  const ListViewSection({
     Key? key,
-  }) : super(key: key) {
-    _stream = _reference.snapshots();
-  }
-
-  final CollectionReference _reference =
-      FirebaseFirestore.instance.collection('items_list');
-
-  //_reference.get() --> returns Future<QuerySnapshot>
-  //_reference.snapshot --> Stream<QuerySnpashot> -- realtime update
-
-  late Stream<QuerySnapshot> _stream;
+    required this.value,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return StreamBuilder<QuerySnapshot>(
-        stream: _stream,
-        builder: (context, AsyncSnapshot snapshot) {
-          //check error ----->
+    return LimitedBox(
+      maxHeight: size.height * 0.24,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: value.length,
+        itemBuilder: (context, index) {
+          return MainCard(
+            index: index,
+            value: value,
+          );
+        },
+      ),
+    );
+  }
+  //   return const Center(
+  //     child: CircularProgressIndicator(),
+  //   );
+  // });
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Eroor${snapshot.error}'),
-            );
-          }
+}
 
-          //check if data is arrived ------>
+class MainCard extends StatelessWidget {
+  int index;
+  final List value;
+  MainCard({
+    super.key,
+    required this.index,
+    required this.value,
+  });
 
-          if (snapshot.hasData) {
-            //get data -------->
-
-            QuerySnapshot querySnapshot = snapshot.data;
-            List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-
-            //converting the documents to map -------->
-
-            List<Map> items = documents
-                .map((e) => {
-                      'id': e['id'],
-                      'name': e['name'],
-                      'org_price': e['original_price'],
-                      'image': e['imageUrl'],
-                      'dis_price': e['discounted_price'],
-                      'description': e['desciption']
-                    })
-                .toList();
-
-            //Display the list -------->
-
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisExtent: size.height * 0.30),
-              itemCount: items.length,
-              itemBuilder: (context, index) => GestureDetector(
-                child: Card(
-                  margin: const EdgeInsets.all(5),
-                  shadowColor: Colors.black,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    FontAwesomeIcons.solidHeart,
-                                    color: Colors.grey[400],
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            width: size.width * 0.32,
-                            height: size.height * 0.15,
-                            child: Image(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                items[index]['image'],
-                              ),
-                              height: size.height * 0.15,
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.01,
-                          ),
-                          Text(items[index]['name']),
-                          SizedBox(
-                            height: size.height * 0.005,
-                          ),
-                          Text(
-                            ("₹ ${items[index]['dis_price']}.00"),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return GestureDetector(
+      child: Card(
+        elevation: 10.0,
+        margin: const EdgeInsets.all(5),
+        shadowColor: Colors.black,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  width: size.width * 0.32,
+                  height: size.height * 0.15,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image(
+                      fit: BoxFit.contain,
+                      image: NetworkImage(value[index]["images"][0]["url"]),
+                      height: size.height * 0.15,
+                    ),
                   ),
                 ),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: ((context) => ItemScreen(
-                            id: items[index]['id'],
-                            name: items[index]['name'],
-                            orgPrice: items[index]['org_price'],
-                            disPrice: items[index]['dis_price'],
-                            description: items[index]['description'],
-                            imageUrl: items[index]['image'],
-                          )),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4),
+                  child: SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.02,
+                    child: Text(
+                      value[index]["name"],
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                },
-              ),
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.02,
+                    child: Text(
+                      value[index]["price"],
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ItemScreen(
+            id: value[index]["_id"],
+            name: value[index]["name"],
+            orgPrice: value[index]["originalPrice"],
+            disPrice: value[index]["price"],
+            description: value[index]["description"],
+            imageUrl: value[index]["images"][0]["url"],
+          ),
+        ));
+      },
+    );
   }
 }

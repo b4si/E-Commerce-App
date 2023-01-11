@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +12,10 @@ class BannerContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
-
     return Consumer<HomeProvider>(
       builder: (context, value, child) => CarouselSlider.builder(
           options: CarouselOptions(
-            height: 190,
+            height: 160,
             autoPlay: true,
             viewportFraction: 1,
             enlargeCenterPage: true,
@@ -50,12 +47,12 @@ class BannerDots extends StatelessWidget {
         child: AnimatedSmoothIndicator(
           activeIndex: value.activeIndex,
           count: value.imageList.length,
-          effect: const SlideEffect(
+          effect: SlideEffect(
             radius: 10,
             dotHeight: 11,
             dotWidth: 11,
             dotColor: Colors.grey,
-            activeDotColor: Colors.teal,
+            activeDotColor: Colors.teal.shade400,
           ),
         ),
       ),
