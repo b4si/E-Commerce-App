@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/provider/login_provider.dart';
 import 'package:e_commerce_app/provider/otp_provider.dart';
@@ -12,6 +15,8 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  getMapFromSharedPreferences();
+  gettingMap();
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 

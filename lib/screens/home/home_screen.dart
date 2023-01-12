@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:e_commerce_app/provider/login_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/home/banner_widget.dart';
 import 'package:e_commerce_app/screens/home/navigation_drawer_widget.dart';
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).getProducts(context);
+
     return Scaffold(
       endDrawer: const NavigationDrawer(),
       appBar: AppBar(
@@ -134,7 +136,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const CartScreenWidget(),
           const WishListScreen(),
-          const ProfileScreen(),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: Consumer<HomeProvider>(
@@ -221,60 +223,67 @@ class MainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
-      child: Card(
-        elevation: 10.0,
-        margin: const EdgeInsets.all(5),
-        shadowColor: Colors.black,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                SizedBox(
-                  width: size.width * 0.32,
-                  height: size.height * 0.15,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image(
-                      fit: BoxFit.contain,
-                      image: NetworkImage(value[index]["images"][0]["url"]),
-                      height: size.height * 0.15,
-                    ),
+      child: value.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+              ),
+            )
+          : Card(
+              elevation: 10.0,
+              margin: const EdgeInsets.all(5),
+              shadowColor: Colors.black,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: size.width * 0.32,
+                        height: size.height * 0.15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image(
+                            fit: BoxFit.contain,
+                            image:
+                                NetworkImage(value[index]["images"][0]["url"]),
+                            height: size.height * 0.15,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 4),
+                        child: SizedBox(
+                          width: size.width * 0.3,
+                          height: size.height * 0.02,
+                          child: Text(
+                            value[index]["name"],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SizedBox(
+                          width: size.width * 0.3,
+                          height: size.height * 0.02,
+                          child: Text(
+                            value[index]["price"],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4),
-                  child: SizedBox(
-                    width: size.width * 0.3,
-                    height: size.height * 0.02,
-                    child: Text(
-                      value[index]["name"],
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SizedBox(
-                    width: size.width * 0.3,
-                    height: size.height * 0.02,
-                    child: Text(
-                      value[index]["price"],
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ItemScreen(

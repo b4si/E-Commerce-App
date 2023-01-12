@@ -37,18 +37,23 @@ class LoginProvider with ChangeNotifier {
       );
 
       Map<String, dynamic> user = {};
+
+      // log(user['name']);
+      // addPreferredShare(
+      //   user['email'],
+      //   user["_id"],
+      //   user["name"],
+      // );
+      // log(user.toString());
       user.addAll(response.data);
 
-      addPreferredShare(
-        user["user"]["email"],
-        user["user"]["_id"],
-        user["user"]["name"],
-      );
+      saveMapToSharedPreferences(user);
+      log(user.toString());
 
       //checking the response is success or not-------->
 
       if (response.statusCode == 200) {
-        log(user["user"]["name"].toString());
+        // log(user[0]["name"].toString());
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

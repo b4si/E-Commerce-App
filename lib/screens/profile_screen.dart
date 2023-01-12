@@ -24,13 +24,21 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(
               height: size.height * 0.02,
             ),
-            Text(emailIds[0].name),
+            emailIds.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(strokeWidth: 4),
+                  )
+                : Text(emailIds['user']['name']),
             SizedBox(
               height: size.height * 0.01,
             ),
-            Text(
-              emailIds[0].email,
-            ),
+            emailIds.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(strokeWidth: 4),
+                  )
+                : Text(
+                    emailIds['user']['email'],
+                  ),
             SizedBox(
               height: size.height * 0.02,
             ),

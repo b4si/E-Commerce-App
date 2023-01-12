@@ -21,13 +21,20 @@ class BannerContainer extends StatelessWidget {
             enlargeCenterPage: true,
             onPageChanged: (index, reason) => value.changeBannerIndex(index),
           ),
-          itemCount: value.imageList.length,
+          itemCount: value.bannerList.length,
           itemBuilder: (context, index, realIndex) {
-            final images = value.imageList[index];
-            return Image(
-              image: NetworkImage(images),
-              fit: BoxFit.cover,
-            );
+            // final images = value.bannerList[index];
+
+            return value.bannerList.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                  ))
+                : Image(
+                    image: NetworkImage(
+                        value.bannerList[index]["images"][0]["url"]),
+                    fit: BoxFit.cover,
+                  );
           }),
     );
   }

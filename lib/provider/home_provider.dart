@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/links/url.dart';
+import 'package:e_commerce_app/models/banner_model/banner_model.dart';
 import 'package:e_commerce_app/models/product_model.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,22 @@ class HomeProvider with ChangeNotifier {
   List mobileDataList = [];
   List laptopDataList = [];
   List tabletDataList = [];
+  List bannerList = [];
+
+  Future<void> getBanner() async {
+    try {
+      Response response = await dio.get("$baseUrl/setBanner");
+      final bannerItems = BannerModel.fromJson(response.data);
+      bannerList.clear();
+      bannerList.addAll(bannerItems.banners!.reversed);
+
+      log(bannerList.toString());
+    } on DioError catch (e) {
+      log(e.message);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
   Future<void> getProducts(BuildContext context) async {
     try {
@@ -22,7 +40,7 @@ class HomeProvider with ChangeNotifier {
               seconds: 15,
             ),
           );
-
+      getBanner();
       final getData = ProductModel.fromJson(response.data);
       mobileDataList.clear();
       laptopDataList.clear();
