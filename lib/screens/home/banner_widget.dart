@@ -23,8 +23,6 @@ class BannerContainer extends StatelessWidget {
           ),
           itemCount: value.bannerList.length,
           itemBuilder: (context, index, realIndex) {
-            // final images = value.bannerList[index];
-
             return value.bannerList.isEmpty
                 ? const Center(
                     child: CircularProgressIndicator(

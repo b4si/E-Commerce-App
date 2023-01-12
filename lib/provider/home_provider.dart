@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/links/url.dart';
 import 'package:e_commerce_app/models/banner_model/banner_model.dart';
@@ -25,7 +23,7 @@ class HomeProvider with ChangeNotifier {
       bannerList.clear();
       bannerList.addAll(bannerItems.banners!.reversed);
 
-      log(bannerList.toString());
+      // log(bannerList.toString());
     } on DioError catch (e) {
       log(e.message);
     } catch (e) {

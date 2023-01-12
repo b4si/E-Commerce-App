@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/provider/login_provider.dart';

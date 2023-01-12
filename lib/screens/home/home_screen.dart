@@ -1,14 +1,12 @@
 // ignore_for_file: must_be_immutable
-import 'dart:io';
 
 import 'package:e_commerce_app/provider/home_provider.dart';
-import 'package:e_commerce_app/provider/login_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
+import 'package:e_commerce_app/screens/category_screens/category_screen.dart';
 import 'package:e_commerce_app/screens/home/banner_widget.dart';
 import 'package:e_commerce_app/screens/home/navigation_drawer_widget.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:e_commerce_app/screens/profile_screen.dart';
-import 'package:e_commerce_app/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +19,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).getProducts(context);
-
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       endDrawer: const NavigationDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.teal.shade400,
@@ -130,13 +128,16 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                ListViewSection(value: value.tabletDataList),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ListViewSection(value: value.tabletDataList),
+                ),
               ],
             ),
           ),
+          const CategoryScreen(),
           const CartScreenWidget(),
-          const WishListScreen(),
-          ProfileScreen(),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: Consumer<HomeProvider>(
@@ -151,13 +152,13 @@ class HomeScreen extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.cartShopping),
-              label: 'Cart',
+              icon: const Icon(Icons.category),
+              label: 'Categories',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.heart),
-              label: 'Wishlist',
+              icon: const Icon(FontAwesomeIcons.cartShopping),
+              label: 'Cart',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.teal.shade400,
@@ -203,11 +204,6 @@ class ListViewSection extends StatelessWidget {
       ),
     );
   }
-  //   return const Center(
-  //     child: CircularProgressIndicator(),
-  //   );
-  // });
-
 }
 
 class MainCard extends StatelessWidget {

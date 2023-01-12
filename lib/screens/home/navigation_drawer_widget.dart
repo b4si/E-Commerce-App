@@ -1,4 +1,6 @@
+import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/screens/orders_screen.dart';
+import 'package:e_commerce_app/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -39,11 +41,11 @@ class NavigationDrawer extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text('user'),
+                  Text(emailIds['user']['name']),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text('example@gmail.com'),
+                  Text(emailIds['user']['email']),
                   const SizedBox(
                     height: 10,
                   ),
@@ -70,6 +72,23 @@ class NavigationDrawer extends StatelessWidget {
                     ),
                   );
                 }),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: ListTile(
+                leading: const Icon(FontAwesomeIcons.heart),
+                title: const Text(
+                  'Wishlist',
+                  style: TextStyle(fontSize: 17),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const WishListScreen(),
+                  ));
+                },
               ),
             ),
             Padding(
