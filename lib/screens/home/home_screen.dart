@@ -1,5 +1,5 @@
 // ignore_for_file: must_be_immutable
-
+import 'package:e_commerce_app/provider/cart_provider.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/category_screens/category_screen.dart';
@@ -268,7 +268,7 @@ class MainCard extends StatelessWidget {
                           width: size.width * 0.3,
                           height: size.height * 0.02,
                           child: Text(
-                            value[index]["price"],
+                            "₹ ${value[index]["price"]}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontWeight: FontWeight.bold),

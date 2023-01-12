@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:e_commerce_app/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class ItemScreen extends StatelessWidget {
   ItemScreen({
@@ -95,7 +97,12 @@ class ItemScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<CartProvider>(
+                          context,
+                          listen: false,
+                        ).addToCart(context, id);
+                      },
                       child: const Text(
                         'Add to Cart',
                         style: TextStyle(color: Colors.black),

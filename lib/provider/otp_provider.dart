@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/links/url.dart';
 import 'package:e_commerce_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class OtpProvider with ChangeNotifier {
     );
     try {
       var response = await Dio().post(
-        ('http://10.0.2.2:3000/verifyOtp'),
+        (baseUrl + verifyOtpUrl),
         data: {
           "otp": otpController.text,
           "userEmail": email,

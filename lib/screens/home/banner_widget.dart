@@ -51,7 +51,7 @@ class BannerDots extends StatelessWidget {
       builder: (context, value, child) => SizedBox(
         child: AnimatedSmoothIndicator(
           activeIndex: value.activeIndex,
-          count: value.imageList.length,
+          count: value.bannerList.length,
           effect: SlideEffect(
             radius: 10,
             dotHeight: 11,

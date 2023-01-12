@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/models/user_model.dart';
+import 'package:e_commerce_app/provider/cart_provider.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/provider/login_provider.dart';
 import 'package:e_commerce_app/provider/otp_provider.dart';
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => OtpProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
         ),
       ],
       child: MaterialApp(

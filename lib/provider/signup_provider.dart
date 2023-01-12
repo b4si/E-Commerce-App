@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/links/url.dart';
 import 'package:e_commerce_app/screens/otp_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class SignupProvider with ChangeNotifier {
       )),
     );
     try {
-      var response = await Dio().post(('http://10.0.2.2:3000/otpPage'), data: {
+      var response = await Dio().post((baseUrl + otpPageUrl), data: {
         "name": nameController.text,
         "email": emailController.text,
         "mobile": numberController.text,

@@ -19,7 +19,9 @@ class LaptopScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisExtent: size.height * 0.235),
+              crossAxisCount: 2,
+              mainAxisExtent: size.height * 0.235,
+            ),
             itemCount: value.laptopDataList.length,
             itemBuilder: (context, index) => GestureDetector(
               child: Center(
@@ -41,15 +43,19 @@ class LaptopScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Image(
                                 fit: BoxFit.fitHeight,
-                                image: NetworkImage(value.laptopDataList[index]
-                                    ["images"][0]["url"]),
+                                image: NetworkImage(
+                                  value.laptopDataList[index]["images"][0]
+                                      ["url"],
+                                ),
                                 height: size.height * 0.15,
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 6.0, vertical: 4),
+                              horizontal: 6.0,
+                              vertical: 4,
+                            ),
                             child: SizedBox(
                               width: size.width * 0.3,
                               height: size.height * 0.02,
