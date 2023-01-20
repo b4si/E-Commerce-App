@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:e_commerce_app/provider/cart_provider.dart';
+import 'package:e_commerce_app/provider/whishlist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class ItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provider.of<WishlistProvider>(context, listen: false).checkingWishlist(id);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -41,9 +43,35 @@ class ItemScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(FontAwesomeIcons.heart)),
-                  )
+                      onPressed: () {
+                        Provider.of<WishlistProvider>(context, listen: false)
+                            .addToWishlist(id, context)
+                            .whenComplete(
+                              () => Provider.of<WishlistProvider>(
+                                context,
+                                listen: false,
+                              ).checkingWishlist(id),
+                            )
+                            .whenComplete(
+                              () => Provider.of<WishlistProvider>(
+                                context,
+                                listen: false,
+                              ).previewWishlist(),
+                            );
+                      },
+                      icon:
+                          Provider.of<WishlistProvider>(context, listen: false)
+                                  .isInWishlist
+                              ? const Icon(
+                                  FontAwesomeIcons.solidHeart,
+                                  color: Colors.red,
+                                )
+                              : Icon(
+                                  FontAwesomeIcons.heart,
+                                  color: Colors.grey.shade400,
+                                ),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(

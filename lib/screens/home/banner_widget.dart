@@ -23,16 +23,10 @@ class BannerContainer extends StatelessWidget {
           ),
           itemCount: value.bannerList.length,
           itemBuilder: (context, index, realIndex) {
-            return value.bannerList.isEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(
-                    strokeWidth: 5,
-                  ))
-                : Image(
-                    image: NetworkImage(
-                        value.bannerList[index]["images"][0]["url"]),
-                    fit: BoxFit.cover,
-                  );
+            return Image(
+              image: NetworkImage(value.bannerList[index]["images"][0]["url"]),
+              fit: BoxFit.cover,
+            );
           }),
     );
   }
@@ -64,3 +58,23 @@ class BannerDots extends StatelessWidget {
     );
   }
 }
+
+// class Shimmer extends StatelessWidget {
+//   const Shimmer({
+//     super.key,
+//     required this.width,
+//     required this.height,
+//   });
+
+//   final double width;
+//   final double height;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: height,
+//       width: width,
+    
+//     );
+//   }
+// }

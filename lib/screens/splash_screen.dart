@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
 
     return AnimatedSplashScreen(
       backgroundColor: const Color(0xFF8AE6E3),
-      duration: 3000,
+      duration: 2000,
       splashIconSize: size.width,
       splash: const Image(
           fit: BoxFit.cover, image: AssetImage('assets\\Gadgeto.png')),

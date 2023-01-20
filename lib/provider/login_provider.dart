@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/links/url.dart';
@@ -10,6 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider with ChangeNotifier {
+  bool passwordVisible = true;
+
+  changeVisibilility() {
+    passwordVisible = !passwordVisible;
+    notifyListeners();
+  }
+
   //Controllers for getting email and password from login screeen ------->
 
   TextEditingController emailController = TextEditingController();
@@ -38,16 +44,11 @@ class LoginProvider with ChangeNotifier {
 
       Map<String, dynamic> user = {};
 
-      // log(user['name']);
-      // addPreferredShare(
-      //   user['email'],
-      //   user["_id"],
-      //   user["name"],
-      // );
-      // log(user.toString());
       user.addAll(response.data);
 
       saveMapToSharedPreferences(user);
+      gettingMap();
+
       log(user.toString());
 
       //checking the response is success or not-------->
@@ -97,9 +98,10 @@ class LoginProvider with ChangeNotifier {
       showDialog(
         context: context,
         builder: (context) => const Center(
-            child: AlertDialog(
-          content: Text('No internet connection '),
-        )),
+          child: AlertDialog(
+            content: Text('No internet connection '),
+          ),
+        ),
       );
     } on DioError catch (e) {
       if (e.response == null) {

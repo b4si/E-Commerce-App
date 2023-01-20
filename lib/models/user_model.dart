@@ -1,27 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// class EmailId {
-//   String email;
-//   String id;
-//   String name;
-
-//   EmailId({
-//     required this.email,
-//     required this.id,
-//     required this.name,
-//   });
-// }
-
 Map<String, dynamic> emailIds = {};
-
-// void addPreferredShare(String email, String id, String name) {
-//   emailIds.add(EmailId(
-//     email: email,
-//     id: id,
-//     name: name,
-//   ));
-// }
 
 Future<void> saveMapToSharedPreferences(Map<String, dynamic> myMap) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();

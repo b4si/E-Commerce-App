@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/provider/login_provider.dart';
 import 'package:e_commerce_app/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: 'e-mail',
+                          hintText: 'email',
                           hintStyle: TextStyle(
                             color: Colors.grey.shade500,
                           ),
@@ -96,8 +97,18 @@ class LoginScreen extends StatelessWidget {
                           }
                           return null;
                         },
-                        obscureText: true,
+                        obscureText: value.passwordVisible,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              value.changeVisibilility();
+                            },
+                            icon: Icon(
+                              value.passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
                           hintText: 'password',
                           hintStyle: TextStyle(
                             color: Colors.grey.shade500,
@@ -144,6 +155,7 @@ class LoginScreen extends StatelessWidget {
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             value.loginToHome(context);
+                            gettingMap();
                           }
                         },
                       ),

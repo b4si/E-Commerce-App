@@ -26,6 +26,7 @@ class HomeProvider with ChangeNotifier {
         final bannerItems = BannerModel.fromJson(response.data);
         bannerList.clear();
         bannerList.addAll(bannerItems.banners!.reversed);
+        notifyListeners();
       }
       // log(bannerList.toString());
     } on SocketException {

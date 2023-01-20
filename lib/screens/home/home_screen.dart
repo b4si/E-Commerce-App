@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable
-import 'package:e_commerce_app/provider/cart_provider.dart';
 import 'package:e_commerce_app/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/category_screens/category_screen.dart';
 import 'package:e_commerce_app/screens/home/banner_widget.dart';
-import 'package:e_commerce_app/screens/home/navigation_drawer_widget.dart';
+import 'package:e_commerce_app/screens/home/home_shimmer.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:e_commerce_app/screens/profile_screen.dart';
+import 'package:e_commerce_app/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +19,50 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).getProducts(context);
+    return Consumer<HomeProvider>(
+      builder: (context, value, child) => value.bannerList.isEmpty
+          ? const HomeShimmer()
+          : HomeWidget(pageController: pageController),
+    );
+  }
+}
+
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({
+    Key? key,
+    required this.pageController,
+  }) : super(key: key);
+
+  final PageController pageController;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      endDrawer: const NavigationDrawer(),
+
+      // endDrawer: const NavigationDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.teal.shade400,
         title: const Text('GADGETO'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreenWidget(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                FontAwesomeIcons.cartShopping,
+              ),
+            ),
+          )
+        ],
       ),
+
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
@@ -136,7 +173,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const CategoryScreen(),
-          const CartScreenWidget(),
+          const WishListScreen(),
           const ProfileScreen(),
         ],
       ),
@@ -157,8 +194,8 @@ class HomeScreen extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.cartShopping),
-              label: 'Cart',
+              icon: const Icon(FontAwesomeIcons.heart),
+              label: 'Wishlist',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.teal.shade400,
