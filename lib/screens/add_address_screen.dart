@@ -1,5 +1,6 @@
-import 'package:e_commerce_app/provider/add_address_provider.dart';
-import 'package:e_commerce_app/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/controller/provider/add_address_provider.dart';
+import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/controller/services/add_address_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -232,8 +233,7 @@ class AddAddressScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      value
-                          .postAddress(context)
+                      postAddress(context)
                           .whenComplete(
                             () => clearField(context),
                           )

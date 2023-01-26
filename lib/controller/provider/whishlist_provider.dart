@@ -10,31 +10,25 @@ import 'package:flutter/material.dart';
 class WishlistProvider with ChangeNotifier {
   final dio = Dio();
 
-  ValueNotifier<List> wishList = ValueNotifier([]);
+  List wishList = [];
 
-  bool isInWishlist = false;
-
-  checkingWishlist(id) async {
-    if (wishList.value.isEmpty) {
-      isInWishlist = false;
-      wishList.notifyListeners();
-      notifyListeners();
-      return;
-    }
-    for (int i = 0; i < wishList.value.length; i++) {
-      log('hi');
-      if (wishList.value[i].product.isNotEmpty &&
-          wishList.value[i].product[0].id == id) {
-        log(wishList.value[i].product[0].id);
+  bool checkingWishlist(id) {
+    bool isInWishlist = false;
+    for (int i = 0; i < wishList.length; i++) {
+      if (wishList[i].product[0].id == id) {
+        log(wishList[i].product[0].id);
         isInWishlist = true;
-        wishList.notifyListeners();
-        notifyListeners();
-      } else {
-        isInWishlist = false;
-        wishList.notifyListeners();
-        notifyListeners();
+        break;
+        // }
+        // else if (wishList[i].product.isEmpty) {
+        //   isInWishlist = false;
+        // } else {
+        //   isInWishlist = false;
+        // }
+
       }
     }
+    return isInWishlist;
   }
 
   Future<void> addToWishlist(productId, context) async {
@@ -43,7 +37,7 @@ class WishlistProvider with ChangeNotifier {
         '$baseUrl/addToWishlist/${productId.toString()}/${emailIds['user']['_id'].toString()}',
       );
 
-      if (response.statusCode == 200 && response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         notifyListeners();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -137,29 +131,70 @@ class WishlistProvider with ChangeNotifier {
       Response response =
           await dio.get('$baseUrl/wishlist/${emailIds['user']['_id']}');
       final wishListItem = WishListModel.fromJson(response.data);
-      wishList.value.clear();
+      wishList.clear();
       // log(wishListItem.wishlistProducts[0].product![0]!.images![0]!.url
       //     .toString());
-      wishList.value.addAll(wishListItem.wishlistProducts.reversed);
+      wishList.addAll(wishListItem.wishlistProducts.reversed);
 
-      wishList.notifyListeners();
       notifyListeners();
     } catch (e) {
       log(e.toString());
     }
   }
 
-  Future<void> deleteWishlist(productId) async {
+  Future<void> deleteWishlist(productId, context) async {
     try {
       Response response = await dio.delete(
         '$baseUrl/deleteWishlistItem/$productId/${emailIds['user']['_id']}',
       );
-      wishList.value
-          .removeWhere((wishlist) => wishlist.product[0].id == productId);
-      wishList.notifyListeners();
+      wishList.removeWhere((wishlist) => wishlist.product[0].id == productId);
       notifyListeners();
       log(
         response.data.toString(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        notifyListeners();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.orange.shade800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(15.0),
+            elevation: 6.0,
+            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            content: const Text('Item Removed from Wishlist'),
+          ),
+        );
+      }
+    } on SocketException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red.shade800,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(15.0),
+          elevation: 6.0,
+          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          content: const Text('Check Internet connection'),
+        ),
+      );
+    } on TimeoutException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red.shade800,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(15.0),
+          elevation: 6.0,
+          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          content: const Text('Something went wrong'),
+        ),
       );
     } catch (e) {
       log(e.toString());

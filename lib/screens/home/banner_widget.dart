@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

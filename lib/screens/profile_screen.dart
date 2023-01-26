@@ -1,8 +1,8 @@
 import 'package:e_commerce_app/models/user_model.dart';
-import 'package:e_commerce_app/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
 import 'package:e_commerce_app/screens/add_address_screen.dart';
-import 'package:e_commerce_app/screens/orders_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -15,12 +15,12 @@ class ProfileScreen extends StatelessWidget {
         .showAddress(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
-        child: Consumer<ProfileScreenProvider>(
-          builder: (context, value, child) => Column(
+      body: Consumer<ProfileScreenProvider>(
+        builder: (context, value, child) => SingleChildScrollView(
+          child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.03,
+                height: size.height * 0.02,
               ),
               CircleAvatar(
                 radius: size.height * 0.105,
@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.lightBlue),
+                            MaterialStateProperty.all(Colors.teal.shade300),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -100,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.lightBlue),
+                            MaterialStateProperty.all(Colors.teal.shade300),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -163,38 +163,88 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Container(
-              //     width: double.infinity,
-              //     decoration: BoxDecoration(
-              //       border: Border.all(width: 1),
-              //       borderRadius: BorderRadius.circular(15),
-              //     ),
-              //     child: Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: const [
-              //         Padding(
-              //           padding: EdgeInsets.all(8.0),
-              //           child: Text(
-              //             'Address 2',
-              //             style: TextStyle(
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: EdgeInsets.all(8.0),
-              //           child: Text(
-              //             'Alungaparambil House Kattekkadan ,karakunnu p.o 676123',
-              //             style: TextStyle(fontSize: 14),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.teal.shade200,
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.teal,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: size.width * 0.29,
+                      height: size.height * 0.15,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(
+                            Icons.settings_outlined,
+                            size: 32,
+                          ),
+                          Text(
+                            'Settings',
+                            style: TextStyle(fontSize: 17),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.teal.shade200,
+                        border: Border.all(width: 1, color: Colors.teal),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: size.width * 0.29,
+                      height: size.height * 0.15,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(
+                            FontAwesomeIcons.exclamation,
+                            size: 30,
+                          ),
+                          Text(
+                            'About Us',
+                            style: TextStyle(fontSize: 17),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.teal.shade200,
+                        border: Border.all(width: 1, color: Colors.teal),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: size.width * 0.29,
+                      height: size.height * 0.15,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(
+                            FontAwesomeIcons.fileLines,
+                            size: 30,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              'Terms and Conditions',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),

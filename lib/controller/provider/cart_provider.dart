@@ -10,8 +10,6 @@ import 'package:e_commerce_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class CartProvider with ChangeNotifier {
-  bool isButtonEnabled = false;
-
   ValueNotifier<List<CartList>> mainCartList = ValueNotifier([]);
 
   final dio = Dio();
@@ -21,19 +19,17 @@ class CartProvider with ChangeNotifier {
   var shipping;
   var total;
 
-  checkingButton() {
-    if (mainCartList.value.isEmpty) return;
+  // bool isInCart = false;
+
+  bool checkingInCart(id) {
+    bool isInCart = false;
     for (int i = 0; i < mainCartList.value.length; i++) {
-      if (mainCartList.value[i].itemQuantity <= 1) {
-        log(mainCartList.value[i].itemQuantity.toString());
-        isButtonEnabled = false;
-        notifyListeners();
-      } else {
-        isButtonEnabled = true;
-        notifyListeners();
+      if (mainCartList.value[i].product[0].id == id) {
+        isInCart = true;
+        break;
       }
     }
-    mainCartList.notifyListeners();
+    return isInCart;
   }
 
   Future<void> cartIncrement(productId) async {
@@ -43,7 +39,6 @@ class CartProvider with ChangeNotifier {
       mainCartList.notifyListeners();
       cartPreview();
       notifyListeners();
-      checkingButton();
       log(response.data.toString());
     } catch (e) {
       log(e.toString());
@@ -57,7 +52,6 @@ class CartProvider with ChangeNotifier {
       mainCartList.notifyListeners();
       cartPreview();
       notifyListeners();
-      checkingButton();
       // log(response.data.toString());
     } catch (e) {
       log(e.toString());
@@ -77,7 +71,6 @@ class CartProvider with ChangeNotifier {
       total = cartItems.total;
       mainCartList.notifyListeners();
       notifyListeners();
-      checkingButton();
     } catch (e) {
       log(e.toString());
     }
@@ -92,7 +85,6 @@ class CartProvider with ChangeNotifier {
           .removeWhere((element) => element.product[0].id == productId);
       mainCartList.notifyListeners();
       notifyListeners();
-      checkingButton();
     } catch (e) {
       log(e.toString());
     }

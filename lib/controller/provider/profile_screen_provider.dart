@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/controller/services/add_address_services.dart';
 import 'package:e_commerce_app/links/url.dart';
 import 'package:e_commerce_app/models/address_model.dart';
 import 'package:e_commerce_app/models/user_model.dart';
@@ -11,6 +11,13 @@ class ProfileScreenProvider with ChangeNotifier {
   final dio = Dio();
 
   List<dynamic> addressList = [];
+
+  Address? address;
+
+  void assignAddress(Address address) {
+    this.address = address;
+    notifyListeners();
+  }
 
   Future<void> showAddress(context) async {
     try {
@@ -28,5 +35,11 @@ class ProfileScreenProvider with ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future deleteAddressNotifier(context, addressId) async {
+    // Future response =
+    deleteAddress(addressId).whenComplete(() => showAddress(context));
+    notifyListeners();
   }
 }

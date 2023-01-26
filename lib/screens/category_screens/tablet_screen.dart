@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +90,7 @@ class TabletScreen extends StatelessWidget {
                     disPrice: value.tabletDataList[index]["price"],
                     description: value.tabletDataList[index]["description"],
                     imageUrl: value.tabletDataList[index]["images"][0]["url"],
+                    highlights: value.tabletDataList[index]["highlights"],
                   ),
                 ));
               },

@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/provider/cart_provider.dart';
+import 'package:e_commerce_app/controller/provider/cart_provider.dart';
 import 'package:e_commerce_app/screens/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +10,10 @@ class CartScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Provider.of<CartProvider>(context, listen: false).checkingButton();
 
-    Provider.of<CartProvider>(context, listen: false).cartPreview();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal.shade300,
         title: const Text('Cart'),
       ),
       body: ListView(
@@ -101,7 +101,11 @@ class CartScreenWidget extends StatelessWidget {
                             child: Row(
                               children: [
                                 Opacity(
-                                  opacity: value.isButtonEnabled ? 1.0 : 0.5,
+                                  opacity: value.mainCartList.value[index]
+                                              .itemQuantity >
+                                          1
+                                      ? 1.0
+                                      : 0.5,
                                   child: TextButton(
                                     style: ButtonStyle(
                                       backgroundColor:
@@ -114,7 +118,9 @@ class CartScreenWidget extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    onPressed: value.isButtonEnabled
+                                    onPressed: value.mainCartList.value[index]
+                                                .itemQuantity >
+                                            1
                                         ? () {
                                             Provider.of<CartProvider>(context,
                                                     listen: false)
@@ -127,8 +133,13 @@ class CartScreenWidget extends StatelessWidget {
                                                         .id);
                                           }
                                         : null,
-                                    child: const Text('-',
-                                        style: TextStyle(color: Colors.black)),
+                                    child: const Text(
+                                      '—',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -177,8 +188,46 @@ class CartScreenWidget extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          value.deleteItem(
-                            value.mainCartList.value[index].product[0].id,
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Remove Item',
+                                ),
+                                content: const Text(
+                                  'Are you sure you want to remove this item?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      value
+                                          .deleteItem(
+                                            value.mainCartList.value[index]
+                                                .product[0].id,
+                                          )
+                                          .whenComplete(
+                                            () => Navigator.of(context).pop(),
+                                          );
+                                    },
+                                    child: const Text(
+                                      'Remove',
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.01,
+                                  )
+                                ],
+                              );
+                            },
                           );
                         },
                         icon: const Icon(Icons.delete),
@@ -308,22 +357,26 @@ class CartScreenWidget extends StatelessWidget {
                                 child: TextButton(
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                        Colors.orangeAccent),
+                                        Colors.teal.shade300),
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
+                                        borderRadius: BorderRadius.circular(10),
                                         side: const BorderSide(
                                             color: Colors.grey),
                                       ),
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PaymentScreen(),
-                                    ));
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => PaymentScreen(
+                                          deliveryCharge: value.shipping,
+                                          grandTotal: value.grandtotal,
+                                          subtotal: value.subTotal,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     'Place Order',

@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -91,6 +91,7 @@ class MobileScreen extends StatelessWidget {
                     disPrice: value.mobileDataList[index]["price"],
                     description: value.mobileDataList[index]["description"],
                     imageUrl: value.mobileDataList[index]["images"][0]["url"],
+                    highlights: value.mobileDataList[index]["highlights"],
                   ),
                 ));
               },

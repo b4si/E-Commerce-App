@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:e_commerce_app/provider/otp_provider.dart';
+import 'package:e_commerce_app/controller/provider/otp_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,6 +96,7 @@ class LaptopScreen extends StatelessWidget {
                     disPrice: value.laptopDataList[index]["price"],
                     description: value.laptopDataList[index]["description"],
                     imageUrl: value.laptopDataList[index]["images"][0]["url"],
+                    highlights: value.laptopDataList[index]["highlights"],
                   ),
                 ));
               },

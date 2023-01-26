@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:e_commerce_app/models/user_model.dart';
-import 'package:e_commerce_app/provider/login_provider.dart';
+import 'package:e_commerce_app/controller/provider/login_provider.dart';
 import 'package:e_commerce_app/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,12 +1,13 @@
+import 'package:e_commerce_app/controller/provider/search_provider.dart';
 import 'package:e_commerce_app/models/user_model.dart';
-import 'package:e_commerce_app/provider/add_address_provider.dart';
-import 'package:e_commerce_app/provider/cart_provider.dart';
-import 'package:e_commerce_app/provider/home_provider.dart';
-import 'package:e_commerce_app/provider/login_provider.dart';
-import 'package:e_commerce_app/provider/otp_provider.dart';
-import 'package:e_commerce_app/provider/profile_screen_provider.dart';
-import 'package:e_commerce_app/provider/signup_provider.dart';
-import 'package:e_commerce_app/provider/whishlist_provider.dart';
+import 'package:e_commerce_app/controller/provider/add_address_provider.dart';
+import 'package:e_commerce_app/controller/provider/cart_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/login_provider.dart';
+import 'package:e_commerce_app/controller/provider/otp_provider.dart';
+import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/controller/provider/signup_provider.dart';
+import 'package:e_commerce_app/controller/provider/whishlist_provider.dart';
 import 'package:e_commerce_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileScreenProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
         ),
       ],
       child: MaterialApp(

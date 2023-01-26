@@ -1,11 +1,18 @@
 // ignore_for_file: must_be_immutable
-import 'package:e_commerce_app/provider/home_provider.dart';
+import 'package:badges/badges.dart';
+import 'package:e_commerce_app/controller/provider/cart_provider.dart';
+import 'package:e_commerce_app/controller/provider/home_provider.dart';
+import 'package:e_commerce_app/controller/provider/whishlist_provider.dart';
 import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:e_commerce_app/screens/category_screens/category_screen.dart';
+import 'package:e_commerce_app/screens/category_screens/laptop_screen.dart';
+import 'package:e_commerce_app/screens/category_screens/mobile_screen.dart';
+import 'package:e_commerce_app/screens/category_screens/tablet_screen.dart';
 import 'package:e_commerce_app/screens/home/banner_widget.dart';
 import 'package:e_commerce_app/screens/home/home_shimmer.dart';
 import 'package:e_commerce_app/screens/item_screen.dart';
 import 'package:e_commerce_app/screens/profile_screen.dart';
+import 'package:e_commerce_app/screens/search_screen.dart';
 import 'package:e_commerce_app/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,7 +25,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<HomeProvider>(context, listen: false).getProducts(context);
+    Provider.of<HomeProvider>(context, listen: false).bannerGetter(context);
+    Provider.of<HomeProvider>(context, listen: false).productsGetter(context);
+    Provider.of<CartProvider>(context, listen: false).cartPreview();
+    Provider.of<WishlistProvider>(context, listen: false).previewWishlist();
+
     return Consumer<HomeProvider>(
       builder: (context, value, child) => value.bannerList.isEmpty
           ? const HomeShimmer()
@@ -45,8 +56,21 @@ class HomeWidget extends StatelessWidget {
         backgroundColor: Colors.teal.shade400,
         title: const Text('GADGETO'),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Badge(
+            position: const BadgePosition(top: 0, end: 0),
+            shape: BadgeShape.circle,
+            badgeColor: Colors.red,
+            badgeContent: Text(
+              Provider.of<CartProvider>(context, listen: false)
+                  .mainCartList
+                  .value
+                  .length
+                  .toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
             child: IconButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -59,7 +83,17 @@ class HomeWidget extends StatelessWidget {
                 FontAwesomeIcons.cartShopping,
               ),
             ),
-          )
+          ),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ));
+              },
+              icon: const Icon(
+                FontAwesomeIcons.magnifyingGlass,
+                size: 20,
+              ))
         ],
       ),
 
@@ -70,30 +104,6 @@ class HomeWidget extends StatelessWidget {
           Consumer<HomeProvider>(
             builder: (context, value, child) => ListView(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    bottom: 8,
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: SizedBox(
-                    height: 40,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: const Icon(
-                          Icons.search_outlined,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 const BannerContainer(),
                 const SizedBox(
                   height: 7,
@@ -114,9 +124,18 @@ class HomeWidget extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Text(
-                        'View All',
-                        style: TextStyle(color: Colors.blue.shade400),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MobileScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View All',
+                          style: TextStyle(color: Colors.blue.shade400),
+                        ),
                       )
                     ],
                   ),
@@ -134,10 +153,19 @@ class HomeWidget extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Text(
-                        'View All',
-                        style: TextStyle(
-                          color: Colors.blue.shade400,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LaptopScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View All',
+                          style: TextStyle(
+                            color: Colors.blue.shade400,
+                          ),
                         ),
                       )
                     ],
@@ -156,10 +184,19 @@ class HomeWidget extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Text(
-                        'View All',
-                        style: TextStyle(
-                          color: Colors.blue.shade400,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const TabletScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View All',
+                          style: TextStyle(
+                            color: Colors.blue.shade400,
+                          ),
                         ),
                       )
                     ],
@@ -177,40 +214,44 @@ class HomeWidget extends StatelessWidget {
           const ProfileScreen(),
         ],
       ),
-      bottomNavigationBar: Consumer<HomeProvider>(
-        builder: (context, value, child) => BottomNavigationBar(
-          currentIndex: value.selectedIndex,
-          unselectedItemColor: Colors.white38,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.house),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.teal.shade400,
-              icon: const Icon(Icons.category),
-              label: 'Categories',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.heart),
-              label: 'Wishlist',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.teal.shade400,
-              icon: const Icon(FontAwesomeIcons.user),
-              label: 'Profile',
-            ),
-          ],
-          onTap: (gettingValue) {
-            value.navigationChanger(gettingValue);
-            pageController.animateToPage(
-              gettingValue,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-            );
-          },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Consumer<HomeProvider>(
+          builder: (context, value, child) => BottomNavigationBar(
+            elevation: 10,
+            currentIndex: value.selectedIndex,
+            unselectedItemColor: Colors.white38,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                backgroundColor: Colors.teal.shade400,
+                icon: const Icon(FontAwesomeIcons.house),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.teal.shade400,
+                icon: const Icon(Icons.category),
+                label: 'Categories',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.teal.shade400,
+                icon: const Icon(FontAwesomeIcons.solidHeart),
+                label: 'Wishlist',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.teal.shade400,
+                icon: const Icon(FontAwesomeIcons.solidUser),
+                label: 'Profile',
+              ),
+            ],
+            onTap: (gettingValue) {
+              value.navigationChanger(gettingValue);
+              pageController.animateToPage(
+                gettingValue,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -326,6 +367,7 @@ class MainCard extends StatelessWidget {
             disPrice: value[index]["price"],
             description: value[index]["description"],
             imageUrl: value[index]["images"][0]["url"],
+            highlights: value[index]["highlights"],
           ),
         ));
       },
