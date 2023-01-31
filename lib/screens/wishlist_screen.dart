@@ -14,22 +14,24 @@ class WishListScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<WishlistProvider>(
-          builder: (context, value, child) => GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisExtent: size.height * 0.315),
-            itemCount: value.wishList.length,
-            itemBuilder: (context, index) => value.wishList.isEmpty
-                ? const Center(
-                    child: Text(
-                      'Your Wishlist is empty',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : Card(
+      body: Consumer<WishlistProvider>(
+        builder: (context, value, child) => value.wishList.isEmpty
+            ? Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Image(image: AssetImage('assets\\wishlist.jpg')),
+                  ],
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, mainAxisExtent: size.height * 0.315),
+                  itemCount: value.wishList.length,
+                  itemBuilder: (context, index) => Card(
                     elevation: 10.0,
                     margin: const EdgeInsets.all(5),
                     shadowColor: Colors.black,
@@ -185,8 +187,8 @@ class WishListScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-          ),
-        ),
+                ),
+              ),
       ),
     );
   }

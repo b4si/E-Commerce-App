@@ -1,14 +1,21 @@
 import 'package:e_commerce_app/controller/provider/cart_provider.dart';
+import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/screens/add_address_screen.dart';
 import 'package:e_commerce_app/screens/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartScreenWidget extends StatelessWidget {
-  const CartScreenWidget({super.key});
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Provider.of<CartProvider>(context, listen: false).checkingButton();
+    Provider.of<ProfileScreenProvider>(context, listen: false)
+        .showAddress(context);
+    Future.delayed(const Duration(seconds: 2), () {
+      Provider.of<ProfileScreenProvider>(context, listen: false)
+          .initialFunction();
+    });
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -105,20 +112,9 @@ class CartScreenWidget extends StatelessWidget {
                                               .itemQuantity >
                                           1
                                       ? 1.0
-                                      : 0.5,
-                                  child: TextButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        const RoundedRectangleBorder(
-                                          side: BorderSide(color: Colors.grey),
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: value.mainCartList.value[index]
+                                      : 0.4,
+                                  child: GestureDetector(
+                                    onTap: value.mainCartList.value[index]
                                                 .itemQuantity >
                                             1
                                         ? () {
@@ -133,20 +129,31 @@ class CartScreenWidget extends StatelessWidget {
                                                         .id);
                                           }
                                         : null,
-                                    child: const Text(
-                                      '—',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                                    child: Container(
+                                      height: size.height * 0.038,
+                                      width: size.width * 0.12,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 1, color: Colors.grey),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: const Center(
+                                          child: Text(
+                                        '–',
+                                        style: TextStyle(fontSize: 18),
+                                      )),
                                     ),
                                   ),
+                                ),
+                                SizedBox(
+                                  width: size.width * 0.015,
                                 ),
                                 Container(
                                   alignment: Alignment.center,
                                   height: size.height * 0.040,
                                   width: size.width * 0.10,
                                   decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
                                       width: 1,
                                       color: Colors.grey,
@@ -158,26 +165,32 @@ class CartScreenWidget extends StatelessWidget {
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                 ),
-                                TextButton(
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      const RoundedRectangleBorder(
-                                        side: BorderSide(color: Colors.grey),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () {
+                                SizedBox(
+                                  width: size.width * 0.015,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
                                     Provider.of<CartProvider>(context,
                                             listen: false)
                                         .cartIncrement(value.mainCartList
                                             .value[index].product[0].id);
                                   },
-                                  child: const Text('+',
-                                      style: TextStyle(color: Colors.black)),
-                                ),
+                                  child: Container(
+                                    height: size.height * 0.038,
+                                    width: size.width * 0.12,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: const Center(
+                                        child: Text(
+                                      '+',
+                                      style: TextStyle(fontSize: 18),
+                                    )),
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -243,16 +256,23 @@ class CartScreenWidget extends StatelessWidget {
             child: Consumer<CartProvider>(
               builder: (context, value, child) => value
                       .mainCartList.value.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.only(top: 250),
-                      child: Center(
-                        child: Text(
-                          "Oops!! Your cart is Empty",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                  ? Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: size.height * 0.09,
                           ),
-                        ),
+                          const Image(
+                              image: AssetImage('assets\\Empty cart.jpg')),
+                          const Text(
+                            "Oops!! Your cart is Empty",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   : Container(
@@ -368,15 +388,25 @@ class CartScreenWidget extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => PaymentScreen(
-                                          deliveryCharge: value.shipping,
-                                          grandTotal: value.grandtotal,
-                                          subtotal: value.subTotal,
-                                        ),
-                                      ),
-                                    );
+                                    Provider.of<ProfileScreenProvider>(context,
+                                                listen: false)
+                                            .addressList
+                                            .isEmpty
+                                        ? Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddAddressScreen(),
+                                          ))
+                                        : Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PaymentScreen(
+                                                deliveryCharge: value.shipping,
+                                                grandTotal: value.grandtotal,
+                                                subtotal: value.subTotal,
+                                              ),
+                                            ),
+                                          );
                                   },
                                   child: const Text(
                                     'Place Order',

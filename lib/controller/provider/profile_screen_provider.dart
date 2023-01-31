@@ -12,10 +12,16 @@ class ProfileScreenProvider with ChangeNotifier {
 
   List<dynamic> addressList = [];
 
-  Address? address;
+  Address? tempAddress;
+  initialFunction() {
+    if (addressList[0] == null) {
+      return;
+    }
+    tempAddress = addressList.first;
+  }
 
   void assignAddress(Address address) {
-    this.address = address;
+    tempAddress = address;
     notifyListeners();
   }
 
@@ -38,6 +44,7 @@ class ProfileScreenProvider with ChangeNotifier {
   }
 
   Future deleteAddressNotifier(context, addressId) async {
+    log(addressId);
     // Future response =
     deleteAddress(addressId).whenComplete(() => showAddress(context));
     notifyListeners();

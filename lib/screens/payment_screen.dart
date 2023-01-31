@@ -1,10 +1,12 @@
 import 'package:e_commerce_app/controller/provider/cart_provider.dart';
+import 'package:e_commerce_app/controller/provider/checkout_provider.dart';
 import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
 import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/screens/add_address_screen.dart';
 import 'package:e_commerce_app/screens/address_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({
@@ -20,12 +22,18 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     Provider.of<ProfileScreenProvider>(context, listen: false)
-        .showAddress(context);
+        .showAddress(context)
+        .whenComplete(() =>
+            Provider.of<ProfileScreenProvider>(context, listen: false)
+                .initialFunction());
+
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.teal.shade400,
         title: const Text('Payment Section'),
@@ -36,13 +44,8 @@ class PaymentScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0.9, color: Colors.grey),
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              child: Card(
+                elevation: 10,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -54,7 +57,9 @@ class PaymentScreen extends StatelessWidget {
                           child: Text(
                             'Deliver to :',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         value.addressList.isEmpty
@@ -106,14 +111,48 @@ class PaymentScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        value.addressList.isEmpty
-                            ? '-------'
-                            : '${value.address!.houseNo}, ${value.address!.street}, ${value.address!.district}, ${value.address!.state}, ${value.address!.pincode}',
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          child: Text(
+                            value.addressList.isEmpty
+                                ? '-------'
+                                : '${value.tempAddress!.houseNo}, ${value.tempAddress!.street}, ',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          child: Text(
+                            '${value.tempAddress!.district}, ${value.tempAddress!.state}, ',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 2),
+                          child: Text(
+                            ' ${value.tempAddress!.pincode}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: size.height * 0.01,
@@ -125,15 +164,8 @@ class PaymentScreen extends StatelessWidget {
             // const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                ),
-                // height: size.height * 0.23,
+              child: Card(
+                elevation: 10,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -213,48 +245,147 @@ class PaymentScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Divider(
-                      thickness: 2,
+
+                    SizedBox(
+                      height: size.height * 0.01,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: size.height * 0.040,
-                          width: size.width * 0.30,
-                          child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Colors.teal.shade300),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: const BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              'Place Order',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.06,
-                        ),
-                      ],
-                    )
+                    //   ],
+                    // )
                   ],
                 ),
               ),
             ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    height: size.height * 0.06,
+                    width: size.width * 0.4,
+                    child: TextButton(
+                      onPressed: () {
+                        Provider.of<CheckoutProvider>(context, listen: false)
+                            .chekoutNotifier(context);
+                      },
+                      child: const Text(
+                        'Cash on Delivery',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.amberAccent.shade700,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    height: size.height * 0.06,
+                    width: size.width * 0.4,
+                    child: TextButton(
+                      onPressed: () {
+                        Razorpay razorpay = Razorpay();
+                        var options = {
+                          'key': 'rzp_test_y5gvtRY9ZcI4Xg',
+                          'amount':
+                              Provider.of<CartProvider>(context, listen: false)
+                                      .subTotal *
+                                  100,
+                          'name': 'Gadgeto.',
+                          'description': 'Fine T-Shirt',
+                          'retry': {'enabled': true, 'max_count': 1},
+                          'send_sms_hash': true,
+                          'prefill': {
+                            'contact': '8888888888',
+                            'email': 'test@razorpay.com'
+                          },
+                          'external': {
+                            'wallets': ['paytm']
+                          }
+                        };
+                        razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                            (PaymentFailureResponse response) {
+                          handlePaymentErrorResponse(response, context);
+                        });
+                        razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                            (PaymentSuccessResponse response) {
+                          handlePaymentSuccessResponse(response, context);
+                        });
+                        razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                            (ExternalWalletResponse response) {
+                          handleExternalWalletSelected(response, context);
+                        });
+                        razorpay.open(options);
+                      },
+                      child: const Text(
+                        'Online Payment',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  void handlePaymentErrorResponse(PaymentFailureResponse response, context) {
+    /*
+    * PaymentFailureResponse contains three values:
+    * 1. Error Code
+    * 2. Error Description
+    * 3. Metadata
+    * */
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+  }
+
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response, context) {
+    /*
+    * Payment Success Response contains three values:
+    * 1. Order ID
+    * 2. Payment ID
+    * 3. Signature
+    * */
+
+    Provider.of<CheckoutProvider>(context, listen: false)
+        .chekoutNotifier(context);
+    showAlertDialog(
+        context, "Payment Successful", "Payment ID: ${response.paymentId}");
+  }
+
+  void handleExternalWalletSelected(ExternalWalletResponse response, context) {
+    showAlertDialog(
+        context, "External Wallet Selected", "${response.walletName}");
+  }
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    // set up the buttons
+    Widget continueButton = ElevatedButton(
+      child: const Text("Continue"),
+      onPressed: () {},
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

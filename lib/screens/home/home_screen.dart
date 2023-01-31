@@ -57,6 +57,12 @@ class HomeWidget extends StatelessWidget {
         title: const Text('GADGETO'),
         actions: [
           Badge(
+            showBadge: Provider.of<CartProvider>(context, listen: false)
+                    .mainCartList
+                    .value
+                    .isEmpty
+                ? false
+                : true,
             position: const BadgePosition(top: 0, end: 0),
             shape: BadgeShape.circle,
             badgeColor: Colors.red,
@@ -75,7 +81,7 @@ class HomeWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const CartScreenWidget(),
+                    builder: (context) => const CartScreen(),
                   ),
                 );
               },
@@ -140,7 +146,10 @@ class HomeWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                ListViewSection(value: value.mobileDataList),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: ListViewSection(value: value.mobileDataList),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -171,7 +180,10 @@ class HomeWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                ListViewSection(value: value.laptopDataList),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: ListViewSection(value: value.laptopDataList),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -203,7 +215,7 @@ class HomeWidget extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 8, left: 6, right: 6),
                   child: ListViewSection(value: value.tabletDataList),
                 ),
               ],

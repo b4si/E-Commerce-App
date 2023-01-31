@@ -2,6 +2,7 @@
 
 import 'package:e_commerce_app/controller/provider/cart_provider.dart';
 import 'package:e_commerce_app/controller/provider/whishlist_provider.dart';
+import 'package:e_commerce_app/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -42,43 +43,6 @@ class ItemScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 10),
-              //       child: IconButton(
-              //         onPressed: () {
-              //           Provider.of<WishlistProvider>(context, listen: false)
-              //               .addToWishlist(id, context)
-              //               .whenComplete(
-              //                 () => Provider.of<WishlistProvider>(
-              //                   context,
-              //                   listen: false,
-              //                 ).checkingWishlist(id),
-              //               )
-              //               .whenComplete(
-              //                 () => Provider.of<WishlistProvider>(
-              //                   context,
-              //                   listen: false,
-              //                 ).previewWishlist(),
-              //               );
-              //         },
-              //         icon:
-              //             Provider.of<WishlistProvider>(context, listen: false)
-              //                     .isInWishlist
-              //                 ? const Icon(
-              //                     FontAwesomeIcons.solidHeart,
-              //                     color: Colors.red,
-              //                   )
-              //                 : Icon(
-              //                     FontAwesomeIcons.heart,
-              //                     color: Colors.grey.shade400,
-              //                   ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -130,21 +94,7 @@ class ItemScreen extends StatelessWidget {
                                         color: Colors.grey.shade400,
                                         size: 26,
                                       ),
-                              )
-                              //           : GestureDetector(
-                              //               onTap: () {
-                              //                 Provider.of<WishlistProvider>(context,
-                              //                         listen: false)
-                              //                     .addToWishlist(id, context);
-                              //               },
-                              //               child: Icon(
-                              //                 FontAwesomeIcons.solidHeart,
-                              //                 color: Colors.grey.shade400,
-                              //                 size: 26,
-                              //               ),
-                              //             )),
-                              // )
-                              ),
+                              )),
                         ),
                       ],
                     ),
@@ -223,7 +173,7 @@ class ItemScreen extends StatelessWidget {
                             backgroundColor: value.checkingInCart(id)
                                 ? MaterialStateProperty.all(Colors.white)
                                 : MaterialStateProperty.all(
-                                    Colors.orange.shade700),
+                                    Colors.orange.shade400),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -233,7 +183,11 @@ class ItemScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: value.checkingInCart(id)
-                              ? null
+                              ? (() => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const CartScreen(),
+                                    ),
+                                  ))
                               : () {
                                   Provider.of<CartProvider>(
                                     context,
@@ -244,7 +198,7 @@ class ItemScreen extends StatelessWidget {
                                 },
                           child: value.checkingInCart(id)
                               ? const Text(
-                                  'Item in cart',
+                                  'Go to cart',
                                   style: TextStyle(color: Colors.black),
                                 )
                               : const Text(

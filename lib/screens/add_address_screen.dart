@@ -243,6 +243,11 @@ class AddAddressScreen extends StatelessWidget {
                                     listen: false,
                                   ).showAddress(context))
                           .whenComplete(
+                            () => Provider.of<ProfileScreenProvider>(context,
+                                    listen: false)
+                                .initialFunction(),
+                          )
+                          .whenComplete(
                             () => Navigator.of(context).pop(),
                           );
                     }
