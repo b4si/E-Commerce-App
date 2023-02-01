@@ -12,7 +12,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<ProfileScreenProvider>(context, listen: false)
         .showAddress(context);
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       Provider.of<ProfileScreenProvider>(context, listen: false)
           .initialFunction();
     });

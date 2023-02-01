@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/controller/services/add_address_services.dart';
 import 'package:flutter/material.dart';
 
 class AddAddressProvider with ChangeNotifier {
@@ -6,6 +7,11 @@ class AddAddressProvider with ChangeNotifier {
   TextEditingController districtController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
+
+  Future addAddressNotifier(context) async {
+    await AddaddressServices().postAddress(context);
+    notifyListeners();
+  }
 
   // Future deleteAddressNotifier(context, addressId) async {
   //   Future response = deleteAddress(addressId);

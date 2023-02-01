@@ -9,30 +9,37 @@ import 'package:e_commerce_app/screens/order_success._screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-Future placeOrder(context) async {
-  try {
-    Response response = await Dio().post('$baseUrl/placeOrder', data: {
-      "name": emailIds['user']['name'],
-      "email": emailIds['user']['email'],
-      "mobile": emailIds['user']['mobile'],
-      "addressLine": Provider.of<ProfileScreenProvider>(context, listen: false)
-          .tempAddress,
-      "cartId": Provider.of<CartProvider>(context, listen: false)
-          .mainCartList
-          .value[0]
-          .id,
-      "userId": emailIds['user']['_id'],
-      "payment": 'cod',
-    });
-    if (response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: ((context) => const OrderSuccessScreen()),
-          ),
-          (route) => false);
+class CheckoutServices {
+  Future placeOrder(context, paymentId, String paymentMod, int amount) async {
+    final address =
+        Provider.of<ProfileScreenProvider>(context, listen: false).tempAddress;
+    try {
+      Response response = await Dio().post('$baseUrl/placeOrder', data: {
+        "name": emailIds['user']['name'],
+        "email": emailIds['user']['email'],
+        "mobile": emailIds['user']['mobile'],
+        "addressLine":
+            "${address!.houseNo}, ${address.street}, ${address.district}, ${address.state}, ${address.pincode}",
+        "cartId": Provider.of<CartProvider>(context, listen: false)
+            .mainCartList
+            .value[0]
+            .id,
+        "userId": emailIds['user']['_id'],
+        "payment": paymentMod,
+        "amount": amount
+      });
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: ((context) => OrderSuccessScreen(
+                    paymentId: paymentId,
+                  )),
+            ),
+            (route) => false);
+      }
+      log(response.data.toString());
+    } catch (e) {
+      log(e.toString());
     }
-    log(response.data.toString());
-  } catch (e) {
-    log(e.toString());
   }
 }

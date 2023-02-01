@@ -1,4 +1,6 @@
 import 'package:e_commerce_app/controller/provider/checkout_provider.dart';
+import 'package:e_commerce_app/controller/provider/order_provider.dart';
+import 'package:e_commerce_app/controller/provider/payment_provider.dart';
 import 'package:e_commerce_app/controller/provider/search_provider.dart';
 import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/controller/provider/add_address_provider.dart';
@@ -63,6 +65,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CheckoutProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PaymentProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OrderProvider(),
         ),
       ],
       child: MaterialApp(

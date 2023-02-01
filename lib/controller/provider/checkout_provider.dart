@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutProvider with ChangeNotifier {
-  Future<void> chekoutNotifier(context) async {
-    await placeOrder(context);
+  Future<void> chekoutNotifier(context, paymentId, paymentMod, amount) async {
+    await CheckoutServices().placeOrder(context, paymentId, paymentMod, amount);
     Provider.of<CartProvider>(context, listen: false)
         .mainCartList
         .value

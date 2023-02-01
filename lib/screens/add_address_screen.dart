@@ -233,7 +233,8 @@ class AddAddressScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      postAddress(context)
+                      value
+                          .addAddressNotifier(context)
                           .whenComplete(
                             () => clearField(context),
                           )

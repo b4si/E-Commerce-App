@@ -46,7 +46,9 @@ class ProfileScreenProvider with ChangeNotifier {
   Future deleteAddressNotifier(context, addressId) async {
     log(addressId);
     // Future response =
-    deleteAddress(addressId).whenComplete(() => showAddress(context));
+    AddaddressServices()
+        .deleteAddress(addressId)
+        .whenComplete(() => showAddress(context));
     notifyListeners();
   }
 }

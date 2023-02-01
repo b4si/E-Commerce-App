@@ -1,5 +1,8 @@
+import 'package:e_commerce_app/controller/provider/order_provider.dart';
+import 'package:e_commerce_app/controller/services/order_srevices.dart';
 import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
+import 'package:e_commerce_app/screens/orders_screen.dart';
 import 'package:e_commerce_app/screens/profile_address_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +16,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<ProfileScreenProvider>(context, listen: false)
         .showAddress(context);
+    Provider.of<OrderProvider>(context, listen: false).getOrderDetails(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -200,7 +204,19 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              ElevatedButton(
+                  onPressed: (() {
+                    if (Provider.of<OrderProvider>(context, listen: false)
+                        .orderDataList!
+                        .isEmpty) {
+                      return;
+                    }
+                    Provider.of<OrderProvider>(context, listen: false)
+                        .getOrderDetails(context);
+                    // OrderServices().orderSuccess(context);
+                  }),
+                  child: const Text('test'))
             ],
           ),
         ),

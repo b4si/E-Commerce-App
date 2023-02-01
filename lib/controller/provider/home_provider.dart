@@ -41,7 +41,7 @@ class HomeProvider with ChangeNotifier {
   // }
 
   Future<void> bannerGetter(context) async {
-    List<dynamic> vari = await getBanner(context);
+    List<dynamic> vari = await homeServices().getBanner(context);
     bannerList.clear();
     bannerList.addAll(vari);
     notifyListeners();
@@ -49,7 +49,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> productsGetter(context) async {
-    List<dynamic> vari = await getProducts(context);
+    List<dynamic> vari = await homeServices().getProducts(context);
     mobileDataList.clear();
     laptopDataList.clear();
     tabletDataList.clear();
