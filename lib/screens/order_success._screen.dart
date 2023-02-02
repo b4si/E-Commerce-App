@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/controller/provider/order_provider.dart';
-import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
@@ -153,8 +153,10 @@ class OrderSuccessScreen extends StatelessWidget {
                             ),
                             value.orderDataList!.isEmpty
                                 ? const Text('......')
-                                : Text(
-                                    " ${value.orderDataList!.first.createdAt}"),
+                                : Text(DateFormat('dd-MMM-yyyy')
+                                    .format(
+                                        value.orderDataList!.first.createdAt)
+                                    .toString()),
                           ],
                         ),
                       ),
@@ -193,8 +195,10 @@ class OrderSuccessScreen extends StatelessWidget {
                             ),
                             value.orderDataList!.isEmpty
                                 ? const Text('......')
-                                : Text(
-                                    " ${value.orderDataList!.first.expectedDate}"),
+                                : Text(DateFormat('dd-MMM-yyyy')
+                                    .format(
+                                        value.orderDataList!.first.expectedDate)
+                                    .toString()),
                           ],
                         ),
                       ),
@@ -208,9 +212,12 @@ class OrderSuccessScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Card(
-                  elevation: 10,
+                  elevation: 15,
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: size.height * 0.009,
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -219,7 +226,7 @@ class OrderSuccessScreen extends StatelessWidget {
                             Text(
                               value.orderDataList!.isEmpty
                                   ? "Add Your Address"
-                                  : emailIds['user']['name'],
+                                  : '${value.orderDataList![0].address.name}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -234,19 +241,43 @@ class OrderSuccessScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
+                            child: SizedBox(
+                              width: size.width * 0.85,
+                              child: Text(
+                                value.orderDataList!.isEmpty
+                                    ? '-------'
+                                    : '${value.orderDataList![0].address.addressLine}',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
                             child: Text(
                               value.orderDataList!.isEmpty
                                   ? '-------'
-                                  : '${value.orderDataList!.first.address}',
+                                  : '${value.orderDataList![0].address.mobile}',
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: size.height * 0.007,
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
             ],
           ),
         ),

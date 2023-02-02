@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SearchProvider with ChangeNotifier {
   FocusNode focusNode = FocusNode();
 
-  void requestFocus() {
+  requestFocus() async {
     focusNode.requestFocus();
   }
 }

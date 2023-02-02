@@ -73,15 +73,15 @@ class ItemScreen extends StatelessWidget {
                                 onTap: value.checkingWishlist(id)
                                     ? () {
                                         value
-                                            .deleteWishlist(id, context)
-                                            .whenComplete(
-                                                () => value.previewWishlist());
+                                            .wishListDeleteNotifier(context, id)
+                                            .whenComplete(() => value
+                                                .previewWishlistNotifier());
                                       }
                                     : () {
                                         value
-                                            .addToWishlist(id, context)
-                                            .whenComplete(
-                                                () => value.previewWishlist());
+                                            .addToWishlistNotifier(context, id)
+                                            .whenComplete(() => value
+                                                .previewWishlistNotifier());
                                       },
                                 child: value.checkingWishlist(id)
                                     ? Icon(

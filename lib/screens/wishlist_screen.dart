@@ -10,7 +10,8 @@ class WishListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<WishlistProvider>(context, listen: false).previewWishlist();
+    Provider.of<WishlistProvider>(context, listen: false)
+        .previewWishlistNotifier();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
@@ -69,10 +70,11 @@ class WishListScreen extends StatelessWidget {
                                                     context,
                                                     listen: false,
                                                   )
-                                                      .deleteWishlist(
-                                                          value.wishList[index]
-                                                              .product[0].id,
-                                                          context)
+                                                      .wishListDeleteNotifier(
+                                                        context,
+                                                        value.wishList[index]
+                                                            .product[0].id,
+                                                      )
                                                       .whenComplete(
                                                         () => Navigator.of(
                                                                 context)

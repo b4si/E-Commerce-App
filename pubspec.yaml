@@ -38,6 +38,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.3.0
+  intl: ^0.18.0
   json_annotation: ^4.7.0
   json_serializable: ^6.5.4
   provider: ^6.0.5

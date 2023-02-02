@@ -42,4 +42,13 @@ class CheckoutServices {
       log(e.toString());
     }
   }
+
+  Future<void> cancelOrder(context, checkoutId) async {
+    try {
+      Response response = await Dio().put("$baseUrl/cancelOrder/$checkoutId");
+      log(response.data.toString());
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

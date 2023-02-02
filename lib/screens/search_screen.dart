@@ -11,10 +11,13 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<SearchProvider>(
-      context,
-      listen: false,
-    ).requestFocus();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Provider.of<SearchProvider>(
+        context,
+        listen: false,
+      ).requestFocus();
+    });
+
     return Scaffold(
       body: SafeArea(
         child: Column(

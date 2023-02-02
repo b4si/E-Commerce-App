@@ -21,7 +21,7 @@ class HomeProvider with ChangeNotifier {
     if (enteredKeyword.isEmpty) {
       results = allProducts;
     } else {
-      results = allProducts
+      List filteredResults = allProducts
           .where(
             (element) =>
                 element['name'].replaceAll(' ', '').toLowerCase().contains(
@@ -29,16 +29,13 @@ class HomeProvider with ChangeNotifier {
                     ),
           )
           .toList();
+
+      results = filteredResults;
     }
 
     allProducts = results;
     notifyListeners();
   }
-
-  // void searchResult(List results) {
-  //   allProducts = results;
-  //   notifyListeners();
-  // }
 
   Future<void> bannerGetter(context) async {
     List<dynamic> vari = await homeServices().getBanner(context);

@@ -28,7 +28,8 @@ class HomeScreen extends StatelessWidget {
     Provider.of<HomeProvider>(context, listen: false).bannerGetter(context);
     Provider.of<HomeProvider>(context, listen: false).productsGetter(context);
     Provider.of<CartProvider>(context, listen: false).cartPreview();
-    Provider.of<WishlistProvider>(context, listen: false).previewWishlist();
+    Provider.of<WishlistProvider>(context, listen: false)
+        .previewWishlistNotifier();
 
     return Consumer<HomeProvider>(
       builder: (context, value, child) => value.bannerList.isEmpty

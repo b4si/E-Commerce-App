@@ -4,6 +4,7 @@ import 'package:e_commerce_app/models/user_model.dart';
 import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
 import 'package:e_commerce_app/screens/orders_screen.dart';
 import 'package:e_commerce_app/screens/profile_address_screen.dart';
+import 'package:e_commerce_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +125,11 @@ class ProfileScreen extends StatelessWidget {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const OrdersScreen(),
+                            ));
+                          },
                         ),
                       ),
                       Padding(
@@ -200,21 +205,24 @@ class ProfileScreen extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        emailIds.clear();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: ((context) =>
+                                  SplashScreen(isLoggedIn: false)),
+                            ),
+                            (route) => false);
+                      },
                     ),
                   ),
                 ),
               ),
               ElevatedButton(
                   onPressed: (() {
-                    if (Provider.of<OrderProvider>(context, listen: false)
-                        .orderDataList!
-                        .isEmpty) {
-                      return;
-                    }
                     Provider.of<OrderProvider>(context, listen: false)
-                        .getOrderDetails(context);
-                    // OrderServices().orderSuccess(context);
+                        .previewOrderDetails(
+                            context, '63da6ec8a51447265ac5fbc6');
                   }),
                   child: const Text('test'))
             ],
