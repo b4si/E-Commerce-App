@@ -1,14 +1,11 @@
-import 'dart:developer';
-import 'dart:ffi';
-
-import 'package:e_commerce_app/controller/services/checkout_services.dart';
-import 'package:e_commerce_app/controller/services/order_srevices.dart';
+import 'package:e_commerce_app/services/checkout_services.dart';
+import 'package:e_commerce_app/services/order_srevices.dart';
 import 'package:e_commerce_app/models/order_details_model.dart';
 import 'package:e_commerce_app/models/order_model.dart';
 import 'package:flutter/material.dart';
 
 class OrderProvider with ChangeNotifier {
-  List<dynamic>? orderDataList = [];
+  List<dynamic> orderDataList = [];
   List<dynamic> orderDetails = [];
   // ignore: prefer_typing_uninitialized_variables
   var quantity;
@@ -17,7 +14,7 @@ class OrderProvider with ChangeNotifier {
 
   Future getOrderDetails(context) async {
     final tempOrderData = await OrderServices().orderSuccess(context);
-    orderDataList!.clear();
+    orderDataList.clear();
     // if (orderDataList.isEmpty) {
     //   Center(
     //     child: CircularProgressIndicator(
@@ -25,7 +22,12 @@ class OrderProvider with ChangeNotifier {
     //     ),
     // );
     // }
-    orderDataList!.add(tempOrderData.orderData.last);
+    if (tempOrderData.orderData.isEmpty) {
+      return;
+    } else {
+      orderDataList.add(tempOrderData.orderData.last);
+    }
+
     // log(orderDataList![0].address.email.toString());
     notifyListeners();
   }

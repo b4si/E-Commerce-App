@@ -11,7 +11,7 @@ import 'package:e_commerce_app/controller/provider/otp_provider.dart';
 import 'package:e_commerce_app/controller/provider/profile_screen_provider.dart';
 import 'package:e_commerce_app/controller/provider/signup_provider.dart';
 import 'package:e_commerce_app/controller/provider/whishlist_provider.dart';
-import 'package:e_commerce_app/screens/splash_screen.dart';
+import 'package:e_commerce_app/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

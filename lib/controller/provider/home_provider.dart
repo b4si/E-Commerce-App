@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:e_commerce_app/controller/services/home_services.dart';
+import 'package:e_commerce_app/services/home_services.dart';
 import 'package:flutter/material.dart';
 
 class HomeProvider with ChangeNotifier {
   int selectedIndex = 0;
   int activeIndex = 0;
+  int imageActiveIndex = 0;
   final dio = Dio();
   List allProducts = [];
   List mobileDataList = [];
@@ -38,7 +39,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> bannerGetter(context) async {
-    List<dynamic> vari = await homeServices().getBanner(context);
+    List<dynamic> vari = await HomeServices().getBanner(context);
     bannerList.clear();
     bannerList.addAll(vari);
     notifyListeners();
@@ -46,7 +47,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> productsGetter(context) async {
-    List<dynamic> vari = await homeServices().getProducts(context);
+    List<dynamic> vari = await HomeServices().getProducts(context);
     mobileDataList.clear();
     laptopDataList.clear();
     tabletDataList.clear();
@@ -71,6 +72,11 @@ class HomeProvider with ChangeNotifier {
 
   changeBannerIndex(int index) {
     activeIndex = index;
+    notifyListeners();
+  }
+
+  changeImageIndex(int index) {
+    imageActiveIndex = index;
     notifyListeners();
   }
 

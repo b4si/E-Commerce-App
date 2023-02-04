@@ -1,16 +1,18 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:e_commerce_app/controller/services/add_address_services.dart';
-import 'package:e_commerce_app/links/url.dart';
+import 'package:e_commerce_app/services/add_address_services.dart';
 import 'package:e_commerce_app/models/address_model.dart';
 import 'package:e_commerce_app/models/user_model.dart';
+import 'package:e_commerce_app/services/profile_screen_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreenProvider with ChangeNotifier {
   final dio = Dio();
 
   List<dynamic> addressList = [];
+
+  TextEditingController nameController = TextEditingController();
 
   Address? tempAddress;
   initialFunction() {
@@ -25,27 +27,30 @@ class ProfileScreenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  changeNameController() {
+    nameController.text = emailIds['user']['name'];
+    notifyListeners();
+  }
+
+  Future<void> changeName() async {
+    await ProfileService().changeName();
+    notifyListeners();
+  }
+
   Future<void> showAddress(context) async {
-    try {
-      Response response =
-          await dio.get('$baseUrl/userProfile/${emailIds['user']['_id']}');
-      // log(response.data.toString());
-      final addresses = AddressModel.fromJson(
-        response.data,
-      );
-      log(addresses.toString());
-      addressList.clear();
+    final addresses = await ProfileService().showAddress(context);
+    addressList.clear();
+    if (addresses.address.isEmpty) {
+      return;
+    } else {
       addressList.addAll(addresses.address.reversed);
-      notifyListeners();
-      log(addressList[0].state);
-    } catch (e) {
-      log(e.toString());
     }
+    notifyListeners();
   }
 
   Future deleteAddressNotifier(context, addressId) async {
     log(addressId);
-    // Future response =
+
     AddaddressServices()
         .deleteAddress(addressId)
         .whenComplete(() => showAddress(context));
