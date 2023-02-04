@@ -95,7 +95,7 @@ class SearchListViewSection extends StatelessWidget {
                   orgPrice: value.allProducts[index]['originalPrice'],
                   disPrice: value.allProducts[index]['price'],
                   description: value.allProducts[index]['description'],
-                  imageUrl: value.allProducts[index]["images"][0]["url"],
+                  imageUrl: value.allProducts[index]["images"],
                   highlights: value.allProducts[index]["highlights"],
                 ),
               ),
